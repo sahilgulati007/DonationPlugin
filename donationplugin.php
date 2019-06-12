@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Donation Plugin
- * Description: to make donation using woocommerce. Shortcode:donation_buttons.
+ * Description: to make donation using woocommerce. Shortcode:donation_buttons_shortcode.
  * Version: 1.0
  * Author: Sahil Gulati
  * Author URI: http://www.facebook.com/sahilgulati007
@@ -17,15 +17,25 @@ function sg_checkout_add_on() {
         }
     }
     if ( ! $in_cart ) {
-        ob_start();
         echo '<h4>Make a Donation?</h4>';
         echo '<p><a class="button" style="margin-right: 1em; width: auto" href="?add-to-cart=48"> €5 </a><a class="button" style="margin-right: 1em; width: auto" href="?add-to-cart=52"> €20 </a><a class="button" style="width: auto" href="?add-to-cart=53"> €50 </a></p>';
-        return ob_get_clean();
 
     }
 }
 add_action( 'woocommerce_review_order_before_submit', 'sg_checkout_add_on', 9999 );
-add_shortcode( 'donation_buttons' , 'sg_checkout_add_on' );
+//add_shortcode( 'donation_buttons' , 'sg_checkout_add_on' );
+
+add_shortcode('donation_buttons_shortcode','donation_buttons');
+function donation_buttons() {
+    ob_start();
+    ?>
+        <h4>Make a Donation?</h4>
+        <p><a class="button" style="margin-right: 1em; width: auto" href="?add-to-cart=48"> €5 </a><a class="button" style="margin-right: 1em; width: auto" href="?add-to-cart=52"> €20 </a><a class="button" style="width: auto" href="?add-to-cart=53"> €50 </a></p>
+
+    <?php
+    return ob_get_clean();
+}
+
 function sg_redirect_checkout_add_cart( $url ) {
     $url = get_permalink( get_option( 'woocommerce_checkout_page_id' ) );
     return $url;
